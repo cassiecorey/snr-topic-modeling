@@ -61,7 +61,7 @@ def exclusivity(model_components,i,n=20):
     probabilities of that word in all topics.
     """
     topic = model_components['topic_word'][i]
-    topic_word = model_components[topic_word]
+    topic_word = model_components['topic_word']
 
     top_words_idx = topic_word[i].argsort()[:-n-1:-1]
     exclusivity = 0.0
@@ -95,12 +95,10 @@ def average_word_length(model_components,i,n=20):
     """
     Returns average length of top n words from topic.
     """
-    topic = model_components['topic_word'][i]
-    feature_names = model_components['features']
-    tw = top_words(topic,feature_names,n)
+    tw = top_words(model_components,i,n)
     return np.array([len(w) for w in tw]).mean()
 
-def rank1(model_components,i):
+def rank1(model_components ,i):
     """
     This is the likelihood of this topic being
     the most popular topic in a document. Calculated
