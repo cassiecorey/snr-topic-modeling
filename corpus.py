@@ -6,8 +6,26 @@ from nltk.corpus.reader.plaintext import PlaintextCorpusReader
 from scipy.spatial.distance import cosine
 from collections import Counter
 
-import readability
+import readability,os
 import numpy as np
+
+def from_strings(name, doc_strings):
+	"""
+	Converts a list of strings into a PropertiesCorpusReader object.
+	"""
+	if not os.path.exists(name):
+		os.makedirs(name)
+
+	fileids = []
+	for i in range(len(doc_strings)):
+		fn = '{:04}.txt'.format(i)
+		fileids.append(fn)
+		with open(os.path.join(name,fn),'w') as f:
+			f.write(doc_strings[i])
+		f.close()
+	plaintext_reader = PlaintextCorpusReader(name,fileids)
+	properties_reader = PropertiesCorpusReader(plaintext_reader)
+	return properties_reader
 
 class PropertiesCorpusReader(PlaintextCorpusReader):
 	"""
@@ -94,6 +112,16 @@ class PropertiesCorpusReader(PlaintextCorpusReader):
 		for w in  u.intersection(v):
 			stopword_count += counter[w]
 		return stopword_count/len(self.words(doc))
+
+	def word_distribution(doc=None):
+		"""
+		What is the distribution of words in the corpus?
+
+		Returns an alphabetized distribution of the words 
+		"""
+		words = self.words()
+		pass
+
 
 	def raw_docs(self):
 		"""

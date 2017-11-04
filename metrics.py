@@ -27,28 +27,32 @@ def signal_to_noise(model_components,i):
 def distance_from_corpus(model_components,i):
     """
     Measures distance from corpus distribution.
+
+    Distance is measured as Kullback-Leibler divergence.
     """
     doc_word = model_components['doc_word']
     topic = model_components['topic_word'][i]
-    # Total corpus word count
-    S = np.sum(doc_word)
-    corpus_distribution = np.array([x/S for x in np.sum(doc_word,axis=0)])
+    # Total corpus word count (minus stopwords)
+    S = doc_word.sum()
+    corpus_distribution = np.array(doc_word.sum(axis=0)/S)[0]
     distance = 0.0
     for i in range(len(topic)):
-        a = topic[i]
-        b = corpus_distribution[i]
-        distance += a*ath.log(a/b)
+        a = topic[i] # word i's distribution in topic
+        b = corpus_distribution[i] # word i's distribution in corpus
+        distance += a*math.log(a/b)
     return distance
 
 def distance_from_uniform(model_components,i):
     """
     Measures distance from a uniform distribution
     over words in the vocabulary.
+
+    Distance is measured as Kullback-Leibler divergence.
     """
     topic = model_components['topic_word'][i]
     distance = 0.0
     for p in topic:
-        distance += p*math.log(p/1/len(topic))
+        distance += p*math.log(p/(1/len(topic)))
     return distance
 
 def exclusivity(model_components,i,n=20):
@@ -72,10 +76,11 @@ def exclusivity(model_components,i,n=20):
     exclusivity /= n
     return exclusivity
         
-def effective_size(topic):
+def effective_size(model_components,i):
     """
     From politics, effective size of parties.
     """
+    topic = model_components['topic_word'][i]
     size = 0.0
     for p in topic:
         size += math.pow(math.pow(p,2),-1)
