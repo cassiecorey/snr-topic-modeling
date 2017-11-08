@@ -1,0 +1,5 @@
+Robotic system to hasten grape vines pruning
+University students in Adelaide have a designed a robotic system which can hand prune grape vines four times faster than a human.
+Although many grapes are mechanically pruned, premium varieties still need some hand pruning.
+Through GPS and computer imaging, the software can be programed to tell a machine with a mechanical arm, where and at what angles to make the cuts.
+One of the designers, Damien Mavroudis, says it has the potential to save growers time and money.
