@@ -5,6 +5,11 @@ from numpy.linalg import norm
 import math
 import numpy as np
 
+TOPIC_METRICS = ['average_word_length','exclusivity',
+                 'rank1','distance_from_uniform',
+                 'distance_from_corpus','effective_size',
+                 'top_words']
+
 ############################
 # INDIVIDUAL TOPIC METRICS #
 ############################

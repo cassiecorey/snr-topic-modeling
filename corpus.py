@@ -9,6 +9,11 @@ from collections import Counter
 import readability,os
 import numpy as np
 
+# List of currently accessible properties.
+PROPERTIES = ['num_docs','avg_doc_len','vocab_size',
+              'readability','lexical_diversity',
+              'stopword_presence']
+
 def from_strings(name, doc_strings):
 	"""
 	Converts a list of strings into a PropertiesCorpusReader object.
