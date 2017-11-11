@@ -5,7 +5,7 @@ Constructs a baseline model for topic-modeling.
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import CountVectorizer
 
-K = 100
+K = 15
 ALPHA = 1/K
 BETA = 1/K
 
@@ -32,15 +32,15 @@ def get_model(data_samples):
     model_components['doc_topic'] = lda.transform(tf)
     return model_components
 
-def get_top_words(model, feature_names, n_top_words=10):
+def get_top_words(model_components, n_top_words=10):
     top_words = {}
-    for topic_idx, topic in enumerate(model.components_):
+    for topic_idx, topic in enumerate(model_components['topic_word']):
         sorted_top = topic.argsort()[:-n_top_words-1:-1]
-        top_words[topic_idx] = [feature_names[i] for i in sorted_top]
+        top_words[topic_idx] = [model_components['features'][i] for i in sorted_top]
     return top_words
 
-def print_top_words(model, feature_names, n_top_words=10):
-    top_words = get_top_words(lda,feature_names,n_top_words)
+def print_top_words(model_components, n_top_words=10):
+    top_words = get_top_words(model_components,n_top_words)
     for topic in top_words:
         words = ' '.join(top_words[topic])
         print("Topic_{}: {}".format(topic,words))
