@@ -5,8 +5,8 @@ Constructs a baseline model for topic-modeling.
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.feature_extraction.text import CountVectorizer
 
-K = 15
-ALPHA = 1/K
+K = 30
+ALPHA = 1/15
 BETA = 1/K
 
 # TODO: MAKE ALPHA ASYMMETRIC
@@ -28,9 +28,20 @@ def get_model(data_samples):
     # Piece together model components
     model_components['features'] = tf_vectorizer.get_feature_names()
     model_components['topic_word'] = lda.components_
-    model_components['doc_word'] = tf
+    model_components['doc_word'] = tf.toarray()
     model_components['doc_topic'] = lda.transform(tf)
     return model_components
+
+def update_model(num_topics,doc_topic_prior=None,topic_word_prior=None):
+    global lda
+    if doc_topic_prior is not None:
+        ALPHA = doc_topic_prior
+    if topic_word_prior is not None:
+        BETA = topic_word_prior
+    lda = LatentDirichletAllocation(n_components=K,
+                                    doc_topic_prior=ALPHA,
+                                    topic_word_prior=BETA,
+                                    learning_method='online')
 
 def get_top_words(model_components, n_top_words=10):
     top_words = {}

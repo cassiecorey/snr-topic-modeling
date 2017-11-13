@@ -39,7 +39,7 @@ def distance_from_corpus(model_components,i):
     topic = model_components['topic_word'][i]
     # Total corpus word count (minus stopwords)
     S = doc_word.sum()
-    corpus_distribution = np.array(doc_word.sum(axis=0)/S)[0]
+    corpus_distribution = doc_word.sum(axis=0)/S
     distance = 0.0
     for i in range(len(topic)):
         a = topic[i] # word i's distribution in topic
@@ -128,11 +128,18 @@ def rank1(model_components ,i):
 # MULTI-TOPIC and FULL MODEL METRICS #
 ######################################
 
+def kullback_leibler_divergence(topic_a,topic_b):
+    _topic_a = topic_a/norm(topic_a,ord=1)
+    _topic_b = topic_b/norm(topic_b,ord=1)
+    _m = 0.5*(_topic_a+_topic_b)
+    return entropy(_topic_a,_m)
+
 def jensen_shannon_divergence(topic_a,topic_b):
     _topic_a = topic_a/norm(topic_a,ord=1)
     _topic_b = topic_b/norm(topic_b,ord=1)
-    _m = 0.5*(_topic_a+topic_b)
+    _m = 0.5*(_topic_a+_topic_b)
     return 0.5*(entropy(_topic_a,_m)+entropy(_topic_b,_m))
 
 def cosine_distance(topic_a,topic_b):
     return cosine(topic_a,topic_b)
+
