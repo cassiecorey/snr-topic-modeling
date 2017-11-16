@@ -1,6 +1,5 @@
 # UTILITIES
 import pickle,os,metrics
-import fixed_model as fm
 import numpy as np
 import pandas as pd
 from time import time
@@ -54,7 +53,7 @@ def dump_pickle(obj,name):
 			pickle.dump(obj,f)
 			return True
 		except:
-			print("Problem dumping pickle.")
+			print("Problem dumping pickle")
 			return False
 
 def alpha_separate(u,v,alpha):

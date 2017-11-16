@@ -29,7 +29,7 @@ def from_strings(name, doc_strings):
 			f.write(doc_strings[i])
 		f.close()
 	plaintext_reader = PlaintextCorpusReader(name,fileids)
-	properties_reader = PropertiesCorpusReader(plaintext_reader)
+	properties_reader = PropertiesCorpusReader(plaintext_reader,verbose=False)
 	return properties_reader
 
 class PropertiesCorpusReader(PlaintextCorpusReader):
@@ -50,9 +50,10 @@ class PropertiesCorpusReader(PlaintextCorpusReader):
 		stopword_presence
 	"""
 
-	def __init__(self, plaintext_reader, verbose=True):
+	def __init__(self, plaintext_reader, verbose=True, init_properties=True):
 		"""
 		Initialize a PropertiesCorpusReader object.
+		It's faster if you set init_properties field to False.
 		"""
 		PlaintextCorpusReader.__init__(self,
 									   plaintext_reader.root,
@@ -65,20 +66,21 @@ class PropertiesCorpusReader(PlaintextCorpusReader):
 		self.num_docs = len(self.fileids())
 		self.avg_doc_len = np.array([len(self.words(f)) for f in self.fileids()]).mean()
 		self.vocab_size = len(set(self.words()))
-		if verbose:
-			print("Calculating properties...")
-		self.readability = self.readability()
-		if verbose:
-			print("\tReadability calculated.")
-		self.distance_from_uniform = self.distance_from_uniform()
-		if verbose:
-			print("\tDistance from uniform calculated.")
-		self.lexical_diversity = self.lexical_diversity()
-		if verbose:
-			print("\tLexical diversity calculated.")
-		self.stopword_presence = self.stopword_presence()
-		if verbose:
-			print("\tStopword presence calculated.")
+		if init_properties:
+			if verbose:
+				print("Calculating properties...")
+			self.readability = self.readability()
+			if verbose:
+				print("\tReadability calculated.")
+			self.distance_from_uniform = self.distance_from_uniform()
+			if verbose:
+				print("\tDistance from uniform calculated.")
+			self.lexical_diversity = self.lexical_diversity()
+			if verbose:
+				print("\tLexical diversity calculated.")
+			self.stopword_presence = self.stopword_presence()
+			if verbose:
+				print("\tStopword presence calculated.")
 
 	def readability(self,doc=None):
 		measures = readability.getmeasures(self.raw(doc))
@@ -114,7 +116,7 @@ class PropertiesCorpusReader(PlaintextCorpusReader):
 		counter = Counter(self.words(doc))
 		u = set(self.words(doc))
 		v = set(stopwords.words())
-		for w in  u.intersection(v):
+		for w in u.intersection(v):
 			stopword_count += counter[w]
 		return stopword_count/len(self.words(doc))
 

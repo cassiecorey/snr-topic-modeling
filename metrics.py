@@ -1,33 +1,32 @@
 from scipy.spatial.distance import cosine
-from scipy.stats import entropy, signaltonoise
+from scipy.stats import entropy
 from numpy.linalg import norm
 
 import math
 import numpy as np
 
-TOPIC_METRICS = ['average_word_length','exclusivity',
-                 'rank1','distance_from_uniform',
-                 'distance_from_corpus','effective_size',
-                 'top_words']
-
 ############################
 # INDIVIDUAL TOPIC METRICS #
 ############################
+
+def get_top_words(model_components, n_top_words=10):
+    top_words = {}
+    for topic_idx, topic in enumerate(model_components['topic_word']):
+        sorted_top = topic.argsort()[:-n_top_words-1:-1]
+        top_words[topic_idx] = [model_components['features'][i] for i in sorted_top]
+    return top_words
+
+def print_top_words(model_components, n_top_words=10):
+    top_words = get_top_words(model_components,n_top_words)
+    for topic in top_words:
+        words = ' '.join(top_words[topic])
+        print("Topic_{}: {}".format(topic,words))
 
 def coherence(topic):
     """
     TODO: Select a coherence algorithm & run.
     """
     pass
-
-def signal_to_noise(model_components,i):
-    """
-    Calculate the signal to noise ratio.
-
-    TODO: Fix this.
-    """
-    topic = model_components['topic_word'][i]
-    return signaltonoise(topic)
 
 def distance_from_corpus(model_components,i):
     """
