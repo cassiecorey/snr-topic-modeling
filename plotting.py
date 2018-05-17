@@ -74,7 +74,7 @@ def plot_metric(metric_name, plotting_data, legend=True):
             'inaugural':'purple',
             'state_union':'pink'}
 
-  hover = HoverTool(tooltips=[('x','@x'),('y','@y'),('top words','@top_three')])
+  
   
   property_tabs= []
   figs = {}

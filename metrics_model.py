@@ -214,10 +214,6 @@ class MetricsModel():
             all_cos.append(self.cosine_distance(i,j))
         return np.sum(all_cos)/len(all_cos)
 
-    ######################################
-    # MULTI-TOPIC and FULL MODEL METRICS #
-    ######################################
-
     def kullback_leibler_divergence(self,i,j):
         """
         Kives KLD between two topics.

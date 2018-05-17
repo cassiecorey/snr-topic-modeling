@@ -29,7 +29,7 @@ def from_strings(name, doc_strings):
 			f.write(doc_strings[i])
 		f.close()
 	plaintext_reader = PlaintextCorpusReader(name,fileids)
-	properties_reader = PropertiesCorpusReader(plaintext_reader,verbose=False)
+	properties_reader = PropertiesCorpusReader(plaintext_reader,verbose=False,init_properties=False)
 	return properties_reader
 
 class PropertiesCorpusReader(PlaintextCorpusReader):
@@ -134,7 +134,7 @@ class PropertiesCorpusReader(PlaintextCorpusReader):
 		"""
 		Returns a list of the raw documents in the corpus.
 		"""
-		return [self.raw(d) for d in self.fileids()]
+		return [' '.join(self.words(d)) for d in self.fileids()]
 
 	# This is just a nice function to have for printing pretty stats.
 	def print_properties(self):
